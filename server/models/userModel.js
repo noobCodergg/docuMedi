@@ -10,7 +10,8 @@ const userSchema = new mongoose.Schema({
   company: String,       
   website: String,
   blood_group:String,
-  health_condition:String
+  health_condition:String,
+  emergency_contact:String
 });
 
 module.exports = mongoose.model('users', userSchema);

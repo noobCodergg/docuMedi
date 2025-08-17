@@ -10,6 +10,7 @@ import {
   DropletIcon,
   HeartPulseIcon,
   UserIcon,
+  ShieldAlertIcon, // ✅ Icon for emergency contact
 } from "lucide-react";
 
 const Card = () => {
@@ -27,36 +28,35 @@ const Card = () => {
   };
 
   const handleDownload = () => {
-  if (!cardRef.current) return;
+    if (!cardRef.current) return;
 
-  const downloadButton = document.getElementById("download-btn");
+    const downloadButton = document.getElementById("download-btn");
 
-  // Hide without breaking layout
-  downloadButton.style.visibility = "hidden";
-  downloadButton.style.position = "absolute";
+    // Hide without breaking layout
+    downloadButton.style.visibility = "hidden";
+    downloadButton.style.position = "absolute";
 
-  const opt = {
-    margin: 0,
-    filename: `${user.name}_certificate.pdf`,
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: {
-      scale: 2,
-      scrollY: 0,
-    },
-    jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+    const opt = {
+      margin: 0,
+      filename: `${user.name}_certificate.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: {
+        scale: 2,
+        scrollY: 0,
+      },
+      jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+    };
+
+    html2pdf()
+      .set(opt)
+      .from(cardRef.current)
+      .save()
+      .then(() => {
+        // Restore button style
+        downloadButton.style.visibility = "visible";
+        downloadButton.style.position = "static";
+      });
   };
-
-  html2pdf()
-    .set(opt)
-    .from(cardRef.current)
-    .save()
-    .then(() => {
-      // Restore button style
-      downloadButton.style.visibility = "visible";
-      downloadButton.style.position = "static";
-    });
-};
-
 
   useEffect(() => {
     fetchUser();
@@ -66,7 +66,7 @@ const Card = () => {
     return <p className="text-center mt-10 text-gray-600">Loading...</p>;
 
   return (
-    <div className="min-h-screen flex items-center justify-center  px-4 py-10">
+    <div className="min-h-screen flex items-center justify-center px-4 py-10">
       <div
         ref={cardRef}
         className="w-full max-w-3xl bg-white rounded-[40px] border-[2px] border-orange-600 p-10 shadow-2xl font-serif mx-auto"
@@ -104,6 +104,15 @@ const Card = () => {
               <strong>Phone:</strong> {user.phone}
             </p>
           </div>
+
+          {/* ✅ Emergency Contact */}
+          <div className="flex items-center space-x-4">
+            <ShieldAlertIcon className="text-orange-600" />
+            <p>
+              <strong>Emergency :</strong> {user.emergency_contact}
+            </p>
+          </div>
+
           <div className="flex items-center space-x-4">
             <DropletIcon className="text-orange-600" />
             <p>
@@ -133,3 +142,4 @@ const Card = () => {
 };
 
 export default Card;
+

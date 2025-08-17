@@ -16,7 +16,8 @@ const otpSchema = new mongoose.Schema({
     expires: 60 
   },
   blood_group:String,
-  health_condition:String
+  health_condition:String,
+  emergency_contact:String
 });
 
 module.exports = mongoose.model('otps', otpSchema);

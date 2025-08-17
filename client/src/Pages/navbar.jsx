@@ -41,17 +41,12 @@ const Navbar = () => {
             {role === 'admin' && (
               <>
                 <Link
-                  to="/upload"
+                  to="/upload-doctor"
                   className="text-white hover:text-orange-600 font-semibold transition-colors duration-300"
                 >
-                  Upload Movie
+                  Upload Doctor
                 </Link>
-                <Link
-                  to="/admin-movie"
-                  className="text-white hover:text-orange-600 font-semibold transition-colors duration-300"
-                >
-                  All Movies
-                </Link>
+
               </>
             )}
 
@@ -81,6 +76,29 @@ const Navbar = () => {
                   className="text-white hover:text-orange-600 font-semibold transition-colors duration-300"
                 >
                   Create Appointment
+                </Link>
+
+
+                <Link
+                  to="/upload-personal-data"
+                  className="text-white hover:text-orange-600 font-semibold transition-colors duration-300"
+                >
+                  Upload Track Record
+                </Link>
+
+                <Link
+                  to="/record"
+                  className="text-white hover:text-orange-600 font-semibold transition-colors duration-300"
+                >
+                  View record
+                </Link>
+
+
+                <Link
+                  to="/doctor-list"
+                  className="text-white hover:text-orange-600 font-semibold transition-colors duration-300"
+                >
+                  Doctors
                 </Link>
               </>
             )}

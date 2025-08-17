@@ -12,12 +12,13 @@ const Registration = () => {
     email: "",
     password: "",
     address: "",
-    phone: "",
+    phone: "", 
     company: "",
     website: "",
     role: "user",
-    blood_group:"",
-    health_condition:""
+    blood_group: "",
+    health_condition: "",
+    emergency_contact: "",  
   });
 
   useEffect(() => {
@@ -32,20 +33,19 @@ const Registration = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    localStorage.setItem('email',form.email)
+    localStorage.setItem("email", form.email);
     console.log("Form Submitted:", form);
 
-    try{
-      console.log(form)
-      const response = await registration(form)
-      console.log(response)
-      navigate('/otp')
-    }catch(error){
-        console.log(error)
+    try {
+      console.log(form);
+      const response = await registration(form); 
+      console.log(response);
+      navigate("/otp");
+    } catch (error) {
+      console.log(error);
     }
-    
   };
 
   return (
@@ -54,9 +54,7 @@ const Registration = () => {
         onSubmit={handleSubmit}
         className="space-y-4 w-full max-w-md p-6 border rounded-xl shadow"
       >
-        <h2 className="text-2xl font-bold text-center mb-2">
-          Register 
-        </h2>
+        <h2 className="text-2xl font-bold text-center mb-2">Register</h2>
 
         <Input
           name="name"
@@ -101,6 +99,16 @@ const Registration = () => {
           required
         />
 
+        
+        <Input
+          type="tel"
+          name="emergency_contact"
+          placeholder="Emergency Contact Number"
+          value={form.emergency_contact}
+          onChange={handleChange}
+          required
+        />
+
         <Input
           type="text"
           name="blood_group"
@@ -110,7 +118,7 @@ const Registration = () => {
           required
         />
 
-         <Input
+        <Input
           type="text"
           name="health_condition"
           placeholder="Health Condition (eg. diabetic etc..)"
@@ -138,11 +146,13 @@ const Registration = () => {
           </>
         )}
 
-        <Button type="submit" className="w-full mt-4 ">
+        <Button type="submit" className="w-full mt-4">
           Register
         </Button>
 
-        <p>Already have an account? <Link to='/login'>Log in</Link></p>
+        <p>
+          Already have an account? <Link to="/login">Log in</Link>
+        </p>
       </form>
     </div>
   );

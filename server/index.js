@@ -6,7 +6,8 @@ const path = require('path')
 const authRoute = require('./routes/userRoute')
 const fileRoute = require('./routes/fileRoute')
 const appointmentRoute = require('./routes/appointmentRoute')
-
+const personalRoute = require('./routes/personalRoute')
+const doctorRoute = require('./routes/doctorRoute')
 
 require("dotenv").config();
 
@@ -28,6 +29,8 @@ app.use('/api/auth',authRoute)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/files",fileRoute)
 app.use("/api/appointment",appointmentRoute)
+app.use("/api/personalized",personalRoute)
+app.use("/api/doctors",doctorRoute)
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

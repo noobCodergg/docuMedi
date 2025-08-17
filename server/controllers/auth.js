@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken")
 
 exports.registration = async (req, res) => {
   try {
-    const { name, email,password, address, phone, company, website ,role,blood_group,health_condition } = req.body;
+    const { name, email,password, address, phone, company, website ,role,blood_group,health_condition,emergency_contact } = req.body;
 
  
     const existingUser = await userModel.findOne({ email });
@@ -20,7 +20,7 @@ exports.registration = async (req, res) => {
     }
 
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
-
+   console.log(emergency_contact)
     await otpModel.create({
       name,
       email,
@@ -32,10 +32,11 @@ exports.registration = async (req, res) => {
       role,
       otp,
       blood_group,
-      health_condition
-      
+      health_condition,
+      emergency_contact
     });
 
+   
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -76,8 +77,8 @@ exports.verifyOTP = async (req, res) => {
       return res.status(400).json("Invalid OTP!");
     }
 
-    const { name, password, address, phone, company, website ,role,blood_group,health_condition  } = record;
-    await userModel.create({ name, email,password, address, phone, company, website ,role,blood_group,health_condition  });
+    const { name, password, address, phone, company, website ,role,blood_group,health_condition,emergency_contact  } = record;
+    await userModel.create({ name, email,password, address, phone, company, website ,role,blood_group,health_condition,emergency_contact  });
 
     await otpModel.deleteOne({ email });
 
