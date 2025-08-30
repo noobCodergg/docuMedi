@@ -59,6 +59,13 @@ const CreateAppointment = () => {
     try{
       const response = await creatAppointment(payload)
       alert("Appointment Created")
+       setForm({
+      name: "",
+      specialist: "",
+      reason: "",
+      time: "",
+      uploaded_by: userId,
+    });
     }catch(error){
       console.log(error)
     }

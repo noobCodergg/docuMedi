@@ -71,7 +71,7 @@ exports.getPersonalDataForChart = async (req, res) => {
 
 
 const Medication = require("../models/medicationModel");
-
+const cron = require("node-cron");
 
 
 exports.addMedication = async (req, res) => {
@@ -123,43 +123,32 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const cron = require("node-cron");
-cron.schedule("* * * * *", async () => {
-  console.log("⏱ Cron tick at", new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" }));
 
+cron.schedule("* * * * *", async () => {
   try {
     // Current time in Dhaka
     const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" }));
 
     const meds = await Medication.find({});
-    console.log(`🔎 Checking ${meds.length} medications`);
 
     for (const med of meds) {
       for (const time of med.times) {
         const [hour, minute] = time.trim().split(":").map(Number);
+
+        // Build the medication time for today
         const medTime = new Date(now);
         medTime.setHours(hour, minute, 0, 0);
-
-        console.log(`💊 Checking '${med.name}' scheduled at ${hour}:${minute} (frequency: ${med.frequency})`);
 
         // Check frequency
         let shouldSend = false;
 
         if (med.frequency === "weekly") {
           const dayName = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][medTime.getDay()];
-          if (med.weekDays.includes(dayName)) {
-            shouldSend = true;
-          } else {
-            console.log(`⏭ Skipping '${med.name}': today (${dayName}) is not in weekDays [${med.weekDays.join(", ")}]`);
-          }
+          if (med.weekDays.includes(dayName)) shouldSend = true;
         } else if (med.frequency === "monthly") {
-          if (medTime.getDate() === 1) {
-            shouldSend = true;
-          } else {
-            console.log(`⏭ Skipping '${med.name}': today is not the 1st of the month`);
-          }
+          if (medTime.getDate() === 1) shouldSend = true;
         } else {
-          console.log(`⏭ Skipping '${med.name}': frequency is '${med.frequency}' (daily ignored)`);
+          // skip daily
           continue;
         }
 
@@ -168,25 +157,16 @@ cron.schedule("* * * * *", async () => {
         // Compare times (allow 1-minute difference)
         const diff = Math.abs(now.getTime() - medTime.getTime());
         if (diff < 60 * 1000) {
-          console.log(`📤 Sending email for '${med.name}' now`);
           const user = await userModel.findById(med.user);
           if (user && user.email) {
-            try {
-              await transporter.sendMail({
-                from: "your_email@gmail.com",
-                to: user.email,
-                subject: "Medication Reminder 💊",
-                text: `Hi ${user.name}, Reminder: Take ${med.name} (${med.dosage})`,
-              });
-              console.log(`✅ Email sent to ${user.email} for '${med.name}'`);
-            } catch (err) {
-              console.error("❌ Error sending email:", err);
-            }
-          } else {
-            console.log(`❌ No user or email found for '${med.name}'`);
+            await transporter.sendMail({
+              from: "your_email@gmail.com",
+              to: user.email,
+              subject: "Medication Reminder 💊",
+              text: `Hi ${user.name}, Reminder: Take ${med.name} (${med.dosage})`,
+            });
+            console.log(`📩 Email sent to ${user.email} for '${med.name}' at ${hour}:${minute}`);
           }
-        } else {
-          console.log(`⏳ Not sending yet for '${med.name}': time diff ${diff} ms`);
         }
       }
     }
@@ -194,6 +174,7 @@ cron.schedule("* * * * *", async () => {
     console.error("❌ Cron Error:", err);
   }
 });
+
 
 // controllers/personalController.js
 

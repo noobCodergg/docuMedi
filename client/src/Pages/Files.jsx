@@ -44,7 +44,6 @@ const Files = () => {
   const filteredFiles = files.filter((file) => {
     const fileDate = file.createdAt ? new Date(file.createdAt) : null;
 
-    // Convert input dates to Date objects
     const start = startDate ? new Date(startDate) : null;
     const end = endDate ? new Date(endDate) : null;
 
@@ -56,11 +55,19 @@ const Files = () => {
       .toLowerCase()
       .includes(searchCategory.toLowerCase());
 
-    // Date range filter
+    // Date filter
     let matchesDate = true;
     if (fileDate) {
-      if (start && fileDate < start) matchesDate = false;
-      if (end && fileDate > end) matchesDate = false;
+      if (start && !end) {
+        // Only start date → exactly that day
+        matchesDate =
+          fileDate.getFullYear() === start.getFullYear() &&
+          fileDate.getMonth() === start.getMonth() &&
+          fileDate.getDate() === start.getDate();
+      } else if (start && end) {
+        // Range → include start and end
+        matchesDate = fileDate >= start && fileDate <= end;
+      }
     }
 
     return matchesName && matchesCategory && matchesDate;
@@ -70,7 +77,7 @@ const Files = () => {
     <div className="max-w-5xl mx-auto mt-10 p-4 space-y-4">
       <h2 className="text-2xl font-semibold mb-2">Uploaded Files</h2>
 
-      {/* Search Inputs - Single line */}
+      {/* Search Inputs */}
       <div className="flex gap-4 flex-wrap items-center">
         <Input
           placeholder="Search by Name"
@@ -84,8 +91,6 @@ const Files = () => {
           onChange={(e) => setSearchCategory(e.target.value)}
           className="flex-1 min-w-[150px]"
         />
-
-        {/* ✅ Start & End Date Range */}
         <Input
           type="date"
           value={startDate}

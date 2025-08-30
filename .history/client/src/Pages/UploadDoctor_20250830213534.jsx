@@ -39,7 +39,7 @@ const UploadDoctor = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = { name, specialist, contact, schedule }; 
+    const formData = { name, specialist, contact, schedule }; // ✅ include contact
     console.log(formData);
 
     try {

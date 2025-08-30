@@ -25,9 +25,18 @@ const Personalized = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     console.log("Sending Data:", formData)
-
+    setFormData({
+      userId,
+      bloodSugar: "",
+      systolic: "",
+      diastolic: "",
+      stepCount: "",
+      burnedCalories: "",
+      weight: "",
+    });
     try {
       await postData(formData)
+      alert("Submitted Successfully")
     } catch (error) {
       console.log(error)
     }

@@ -19,6 +19,7 @@ const Login = () => {
         console.log(response)
         navigate('/')
     }catch(error){
+        alert('Wrong Credentials')
         console.log(error)
     }
   }

@@ -1,5 +1,5 @@
 const express = require("express");
-const { savePersonalData, getPersonalDataForChart,addMedication,getMedications,deleteMedication,  getRecommendations, chat } = require("../controllers/personalController");
+const { savePersonalData, getPersonalDataForChart,addMedication,getMedications,scheduleReminders,deleteMedication,  getRecommendations, chat } = require("../controllers/personalController");
 
 
 
@@ -15,7 +15,7 @@ router.post("/chat",chat)
 
 
 
-
+scheduleReminders();
 
 
 module.exports = router;

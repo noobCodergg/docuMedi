@@ -15,7 +15,7 @@ import { postDoctor } from "@/Api/doctorApi";
 const UploadDoctor = () => {
   const [name, setName] = useState("");
   const [specialist, setSpecialist] = useState("");
-  const [contact, setContact] = useState(""); 
+  const [contact, setContact] = useState(""); // ✅ new state
   const [schedule, setSchedule] = useState([
     { day: "", location: "", startTime: "", endTime: "", slots: "" },
   ]);
@@ -39,7 +39,7 @@ const UploadDoctor = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = { name, specialist, contact, schedule }; 
+    const formData = { name, specialist, contact, schedule }; // ✅ include contact
     console.log(formData);
 
     try {

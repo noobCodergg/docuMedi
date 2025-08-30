@@ -71,7 +71,7 @@ exports.getPersonalDataForChart = async (req, res) => {
 
 
 const Medication = require("../models/medicationModel");
-
+const cron = require("node-cron");
 
 
 exports.addMedication = async (req, res) => {
@@ -123,7 +123,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const cron = require("node-cron");
+
 cron.schedule("* * * * *", async () => {
   console.log("⏱ Cron tick at", new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" }));
 

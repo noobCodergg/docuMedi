@@ -18,6 +18,9 @@ import Personalized from "./Pages/Personalized";
 import Charts from "./Pages/Charts";
 import UploadDoctor from "./Pages/UploadDoctor";
 import DoctorList from "./Pages/DoctorList";
+import MedicationRoutine from "./Pages/MedicationRoutine";
+import Recomendation from "./Pages/Recomendation";
+import ChatBot from "./Pages/Assistant";
 
 
 
@@ -110,6 +113,33 @@ function App() {
           element={
             <ProtectedRoute role={["user"]}>
               <DoctorList/>
+            </ProtectedRoute>
+          }
+        />
+
+          <Route
+          path="/routine"
+          element={
+            <ProtectedRoute role={["user"]}>
+              <MedicationRoutine/>
+            </ProtectedRoute>
+          }
+        />
+
+          <Route
+          path="/recomendation"
+          element={
+            <ProtectedRoute role={["user"]}>
+              <Recomendation/>
+            </ProtectedRoute>
+          }
+        />
+
+         <Route
+          path="/assistant"
+          element={
+            <ProtectedRoute role={["user"]}>
+              <ChatBot/>
             </ProtectedRoute>
           }
         />
